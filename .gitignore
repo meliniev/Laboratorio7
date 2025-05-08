@@ -1,0 +1,18 @@
+# Ignorar node_modules en ambos directorios
+**/node_modules/
+
+# Backend-farmacia (Node.js)
+backend-farmacia/.env
+backend-farmacia/*.log
+backend-farmacia/dist/
+
+# Frontend (React)
+frontend/.env
+frontend/build/
+frontend/.cache/
+frontend/coverage/
+
+# Archivos generales
+.DS_Store
+.env.local
+*.tmp
