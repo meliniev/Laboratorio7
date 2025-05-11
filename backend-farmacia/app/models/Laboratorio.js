@@ -1,16 +1,22 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+export default (sequelize, Sequelize) => {
+  const Laboratorio = sequelize.define('Laboratorio', {
+    CodLab: { 
+      type: Sequelize.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true 
+    },
+    razonSocial: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    direccion: Sequelize.STRING,
+    telefono: Sequelize.STRING,
+    email: Sequelize.STRING,
+    contacto: Sequelize.STRING
+  }, {
+    tableName: 'Laboratorio',
+    timestamps: false,
+  });
 
-const Laboratorio = sequelize.define('Laboratorio', {
-  CodLab: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  razonSocial: DataTypes.STRING,
-  direccion: DataTypes.STRING,
-  telefono: DataTypes.STRING,
-  email: DataTypes.STRING,
-  contacto: DataTypes.STRING
-}, {
-  tableName: 'Laboratorio',
-  timestamps: false,
-});
-
-export default Laboratorio;
+  return Laboratorio;
+};

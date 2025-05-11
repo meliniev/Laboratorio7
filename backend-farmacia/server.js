@@ -3,6 +3,7 @@ import cors from "cors";
 import db from "./app/models/index.js";
 import authRoutes from "./app/routes/auth.routes.js";
 import userRoutes from "./app/routes/user.routes.js";
+import adminRoutes from "./app/routes/admin.routes.js";
 import farmaciaRoutes from "./app/routes/farmacia.routes.js";
 import dotenv from "dotenv";
 
@@ -21,9 +22,10 @@ app.get("/", (req, res) =>
 // Autenticación y rutas protegidas
 app.use("/api/auth",   authRoutes);
 app.use("/api/users",  userRoutes);
+app.use("/api/admin",  adminRoutes);
 app.use("/api/farmacia", farmaciaRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 db.sequelize
   .sync({ force: false })  // force: true para drop/create tablas

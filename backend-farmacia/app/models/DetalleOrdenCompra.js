@@ -1,24 +1,21 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
-import OrdenCompra from './OrdenCompra.js';
-import Medicamento from './Medicamento.js';
+export default (sequelize, Sequelize) => {
+  const DetalleOrdenCompra = sequelize.define('DetalleOrdenCompra', {
+    NroOrdenC: { 
+      type: Sequelize.INTEGER, 
+      primaryKey: true 
+    },
+    CodMedicamento: { 
+      type: Sequelize.INTEGER, 
+      primaryKey: true 
+    },
+    descripcion: Sequelize.STRING,
+    cantidad: Sequelize.INTEGER,
+    precio: Sequelize.FLOAT,
+    montouni: Sequelize.FLOAT,
+  }, {
+    tableName: 'DetalleOrdenCompra',
+    timestamps: false,
+  });
 
-const DetalleOrdenCompra = sequelize.define('DetalleOrdenCompra', {
-  NroOrdenC: { type: DataTypes.INTEGER, primaryKey: true },
-  CodMedicamento: { type: DataTypes.INTEGER, primaryKey: true },
-  descripcion: DataTypes.STRING,
-  cantidad: DataTypes.INTEGER,
-  precio: DataTypes.FLOAT,
-  montouni: DataTypes.FLOAT,
-}, {
-  tableName: 'DetalleOrdenCompra',
-  timestamps: false,
-});
-
-OrdenCompra.hasMany(DetalleOrdenCompra, { foreignKey: 'NroOrdenC' });
-DetalleOrdenCompra.belongsTo(OrdenCompra, { foreignKey: 'NroOrdenC' });
-
-Medicamento.hasMany(DetalleOrdenCompra, { foreignKey: 'CodMedicamento' });
-DetalleOrdenCompra.belongsTo(Medicamento, { foreignKey: 'CodMedicamento' });
-
-export default DetalleOrdenCompra;
+  return DetalleOrdenCompra;
+};

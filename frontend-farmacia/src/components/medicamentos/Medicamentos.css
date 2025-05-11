@@ -1,0 +1,180 @@
+/* Contenedor principal */
+.medicamentos-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Encabezado con acciones */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la tabla */
+.table-container {
+  overflow-x: auto;
+}
+
+.medicamentos-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.medicamentos-tabla th,
+.medicamentos-tabla td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.medicamentos-tabla th {
+  background-color: #4285f4;
+  color: white;
+  font-weight: 500;
+}
+
+.medicamentos-tabla tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Botones y acciones */
+.btn-nuevo {
+  background-color: #4285f4;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.btn-nuevo:hover {
+  background-color: #3367d6;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editar, .btn-eliminar {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-editar {
+  background-color: #fbbc05;
+  color: white;
+  text-decoration: none;
+}
+
+.btn-editar:hover {
+  background-color: #f9a825;
+}
+
+.btn-eliminar {
+  background-color: #ea4335;
+  color: white;
+  border: none;
+}
+
+.btn-eliminar:hover {
+  background-color: #d32f2f;
+}
+
+/* Formulario */
+.formulario-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  grid-column: span 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancelar,
+.btn-guardar {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.btn-guardar {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+}
+
+.btn-guardar:disabled {
+  background-color: #a8c7fa;
+  cursor: not-allowed;
+}
+
+/* Estados de carga y error */
+.loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error-message {
+  background-color: #fdecea;
+  color: #ea4335;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}

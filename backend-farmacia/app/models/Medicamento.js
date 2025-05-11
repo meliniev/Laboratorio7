@@ -1,19 +1,26 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+export default (sequelize, Sequelize) => {
+  const Medicamento = sequelize.define('Medicamento', {
+    CodMedicamento: { 
+      type: Sequelize.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true 
+    },
+    descripcionMed: Sequelize.STRING,
+    fechaFabricacion: Sequelize.DATE,
+    fechaVencimiento: Sequelize.DATE,
+    Presentacion: Sequelize.STRING,
+    stock: Sequelize.INTEGER,
+    precioVentaUni: Sequelize.FLOAT,
+    precioVentaPres: Sequelize.FLOAT,
+    Marca: Sequelize.STRING,
+    CodLab: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    }
+  }, {
+    tableName: 'Medicamento',
+    timestamps: false,
+  });
 
-const Medicamento = sequelize.define('Medicamento', {
-  CodMedicamento: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  descripcionMed: DataTypes.STRING,
-  fechaFabricacion: DataTypes.DATE,
-  fechaVencimiento: DataTypes.DATE,
-  Presentacion: DataTypes.STRING,
-  stock: DataTypes.INTEGER,
-  precioVentaUni: DataTypes.FLOAT,
-  precioVentaPres: DataTypes.FLOAT,
-  Marca: DataTypes.STRING
-}, {
-  tableName: 'Medicamento',
-  timestamps: false,
-});
-
-export default Medicamento;
+  return Medicamento;
+};

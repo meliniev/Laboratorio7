@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import dbConfig from "../config/db.config.js";
+import sequelize from "../config/db.config.js";
 import userModel from "./user.model.js";
 import roleModel from "./role.model.js";
 import MedicamentoModel from "./Medicamento.js";
@@ -8,18 +8,16 @@ import DetalleOrdenCompraModel from "./DetalleOrdenCompra.js";
 import LaboratorioModel from "./Laboratorio.js";
 
 const db = {};
-db.Sequelize  = Sequelize;
-db.sequelize  = dbConfig;
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-
-db.user       = userModel(db.sequelize, Sequelize);
-db.role       = roleModel(db.sequelize, Sequelize);
-
-
-db.Medicamento          = MedicamentoModel;
-db.OrdenCompra          = OrdenCompraModel;
-db.DetalleOrdenCompra   = DetalleOrdenCompraModel;
-db.Laboratorio          = LaboratorioModel;
+// Inicialización de modelos
+db.user = userModel(sequelize, Sequelize);
+db.role = roleModel(sequelize, Sequelize);
+db.Medicamento = MedicamentoModel(sequelize, Sequelize);
+db.OrdenCompra = OrdenCompraModel(sequelize, Sequelize);
+db.DetalleOrdenCompra = DetalleOrdenCompraModel(sequelize, Sequelize);
+db.Laboratorio = LaboratorioModel(sequelize, Sequelize);
 
 
 db.role.belongsToMany(db.user, {
@@ -34,13 +32,19 @@ db.user.belongsToMany(db.role, {
   as: "roles",
 });
 
+// Asociaciones corregidas entre Laboratorio y Medicamento
+db.Laboratorio.hasMany(db.Medicamento, { foreignKey: 'CodLab' });
+db.Medicamento.belongsTo(db.Laboratorio, { foreignKey: 'CodLab' });
 
+// Asociaciones entre Laboratorio y OrdenCompra
 db.Laboratorio.hasMany(db.OrdenCompra, { foreignKey: 'CodLab' });
 db.OrdenCompra.belongsTo(db.Laboratorio, { foreignKey: 'CodLab' });
 
+// Asociaciones entre OrdenCompra y DetalleOrdenCompra
 db.OrdenCompra.hasMany(db.DetalleOrdenCompra, { foreignKey: 'NroOrdenC' });
 db.DetalleOrdenCompra.belongsTo(db.OrdenCompra, { foreignKey: 'NroOrdenC' });
 
+// Asociaciones entre Medicamento y DetalleOrdenCompra
 db.Medicamento.hasMany(db.DetalleOrdenCompra, { foreignKey: 'CodMedicamento' });
 db.DetalleOrdenCompra.belongsTo(db.Medicamento, { foreignKey: 'CodMedicamento' });
 

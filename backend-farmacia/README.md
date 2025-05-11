@@ -30,12 +30,26 @@ PORT=3000
 npx sequelize-cli db:migrate
 ```
 
-### 5. Iniciar la aplicación:
+### 5. Encriptar contraseñas de usuarios:
+```bash
+node encrypt_passwords.js
+```
+Este paso es necesario para que las contraseñas funcionen con el sistema de autenticación.
+
+### 6. Credenciales de prueba:
+| Usuario    | Contraseña | Rol       |
+|------------|------------|-----------|
+| admin      | admin      | Admin     |
+| moderator  | moderator  | Moderador |
+| user       | user       | Usuario   |
+
+⚠️ **Importante**: 
+- Por seguridad, cambia las contraseñas después de la primera conexión.
+- En un entorno de producción, nunca uses contraseñas tan simples.
+- El script de encriptación solo debe ejecutarse una vez después de crear los usuarios.
+
+### 7. Iniciar la aplicación:
 ```bash
 npm start
 ```
 
-### 6. Poblar datos iniciales (Roles):
-```bash
-mysql -u tu_usuario -p -e "USE bd_farmacia; INSERT INTO Roles (id, name, createdAt, updatedAt) VALUES (1, 'user', NOW(), NOW()), (2, 'moderator', NOW(), NOW()), (3, 'admin', NOW(), NOW());"
-```

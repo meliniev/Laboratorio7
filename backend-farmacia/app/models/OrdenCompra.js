@@ -1,19 +1,22 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
-import Laboratorio from './Laboratorio.js';
+export default (sequelize, Sequelize) => {
+  const OrdenCompra = sequelize.define('OrdenCompra', {
+    NroOrdenC: { 
+      type: Sequelize.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true 
+    },
+    fechaEmision: Sequelize.DATE,
+    Situacion: Sequelize.STRING,
+    Total: Sequelize.FLOAT,
+    NrofacturaProv: Sequelize.STRING,
+    CodLab: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    }
+  }, {
+    tableName: 'OrdenCompra',
+    timestamps: false,
+  });
 
-const OrdenCompra = sequelize.define('OrdenCompra', {
-  NroOrdenC: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  fechaEmision: DataTypes.DATE,
-  Situacion: DataTypes.STRING,
-  Total: DataTypes.FLOAT,
-  NrofacturaProv: DataTypes.STRING
-}, {
-  tableName: 'OrdenCompra',
-  timestamps: false,
-});
-
-Laboratorio.hasMany(OrdenCompra, { foreignKey: 'CodLab' });
-OrdenCompra.belongsTo(Laboratorio, { foreignKey: 'CodLab' });
-
-export default OrdenCompra;
+  return OrdenCompra;
+};
