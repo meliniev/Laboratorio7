@@ -9,18 +9,19 @@ const ListaUsuarios = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  
-  useEffect(() => {
+    useEffect(() => {
     const usuarioActual = ServicioAutenticacion.obtenerUsuarioActual();
+    console.log("Usuario actual:", usuarioActual);
+    console.log("Roles del usuario:", usuarioActual?.roles);
     setUsuario(usuarioActual);
     
     cargarUsuarios();
   }, []);
-  
-  const cargarUsuarios = async () => {
+    const cargarUsuarios = async () => {
     try {
       setLoading(true);
       const response = await ServicioUsuarios.obtenerUsuarios();
+      console.log('Datos de usuarios recibidos:', response.data);
       setUsuarios(response.data);
       setError(null);
     } catch (err) {
@@ -46,9 +47,9 @@ const ListaUsuarios = () => {
   
   if (loading) return <div className="loading">Cargando usuarios...</div>;
   if (error) return <div className="error">{error}</div>;
-  
-  // Verificar si el usuario actual es administrador
+    // Verificar si el usuario actual es administrador
   const esAdmin = usuario?.roles?.includes('ROLE_ADMIN');
+  console.log("¿Es administrador?", esAdmin);
   
   // Si no es administrador, no debería ver esta página
   if (!esAdmin) {

@@ -5,6 +5,7 @@ const { user: User, role: Role } = db;
 
 export const listUsers = async (req, res) => {
   try {
+    console.log("Ejecutando listUsers en admin.controller.js");
     const users = await User.findAll({
       include: [{
         model: Role,
@@ -12,7 +13,19 @@ export const listUsers = async (req, res) => {
         through: { attributes: [] }
       }]
     });
+    console.log("Usuarios encontrados:", users.length);
     res.json(users);
+  } catch (err) {
+    console.error("Error en listUsers:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Función para listar todos los roles disponibles
+export const listRoles = async (req, res) => {
+  try {
+    const roles = await Role.findAll();
+    res.json(roles);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

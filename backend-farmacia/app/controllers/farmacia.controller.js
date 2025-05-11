@@ -1,4 +1,5 @@
 import db from "../models/index.js";
+import { registrarActividad } from "./actividad.controller.js";
 
 const {
   Medicamento,
@@ -27,7 +28,42 @@ export const createMedicamento = async (req, res) => {
       }
     }
     
-    const med = await Medicamento.create(req.body);
+    // Validar fechas de fabricación y caducidad
+    if (req.body.FechaFabricacion && req.body.FechaCaducidad) {
+      const fechaFabricacion = new Date(req.body.FechaFabricacion);
+      const fechaCaducidad = new Date(req.body.FechaCaducidad);
+      
+      if (fechaCaducidad <= fechaFabricacion) {
+        return res.status(400).json({ 
+          error: "La fecha de caducidad debe ser posterior a la fecha de fabricación" 
+        });
+      }
+    }
+    
+    const med = await Medicamento.create(req.body);    // Registrar actividad
+    try {
+      console.log("Registrando creación de medicamento - Usuario:", {
+        userId: req.userId,
+        medicamentoId: med.CodMedicamento,
+        medicamentoNombre: med.descripcionMed
+      });
+      
+      if (!req.userId) {
+        console.warn("⚠️ No hay ID de usuario disponible para registrar la actividad de creación");
+      }
+      
+      await registrarActividad(
+        'creacion',
+        `Se creó el medicamento: ${med.descripcionMed}`,
+        'medicamento',
+        med.CodMedicamento,
+        req.userId, // El ID del usuario que realiza la acción
+        { medicamento: med }
+      );
+    } catch (err) {
+      console.error("Error al registrar actividad:", err);
+    }
+    
     res.status(201).json(med);
   } catch (err) {
     console.error("Error al crear medicamento:", err);
@@ -116,6 +152,18 @@ export const updateMedicamento = async (req, res) => {
       }
     }
     
+    // Validar fechas de fabricación y caducidad
+    if (req.body.FechaFabricacion && req.body.FechaCaducidad) {
+      const fechaFabricacion = new Date(req.body.FechaFabricacion);
+      const fechaCaducidad = new Date(req.body.FechaCaducidad);
+      
+      if (fechaCaducidad <= fechaFabricacion) {
+        return res.status(400).json({ 
+          error: "La fecha de caducidad debe ser posterior a la fecha de fabricación" 
+        });
+      }
+    }
+    
     // Si CodLab existe en el body pero no en la tabla, lo quitamos para evitar errores
     try {
       // Verificar si la columna CodLab existe
@@ -130,14 +178,28 @@ export const updateMedicamento = async (req, res) => {
       
       const [updated] = await Medicamento.update(req.body, { where: { CodMedicamento: id } });
       if (!updated) return res.status(404).json({ message: "Medicamento no encontrado." });
-      
-      const med = await Medicamento.findByPk(id, {
+        const med = await Medicamento.findByPk(id, {
         include: [{
           model: Laboratorio,
           attributes: ['CodLab', 'razonSocial'],
           required: false
         }]
       });
+        // Registrar actividad
+      try {
+        console.log("ID de usuario al actualizar medicamento:", req.userId);
+        await registrarActividad(
+          'modificacion',
+          `Se actualizó el medicamento: ${med.descripcionMed}`,
+          'medicamento',
+          med.CodMedicamento,
+          req.userId,
+          { cambios: req.body }
+        );
+      } catch (err) {
+        console.error("Error al registrar actividad de actualización de medicamento:", err);
+      }
+      
       res.json(med);
     } catch (err) {
       console.error("Error al actualizar medicamento:", err);
@@ -152,10 +214,49 @@ export const updateMedicamento = async (req, res) => {
 export const deleteMedicamento = async (req, res) => {
   try {
     const { id } = req.params;
+    
+    // Primero obtenemos el medicamento para tener su info antes de eliminarlo
+    const medicamento = await Medicamento.findByPk(id);
+    if (!medicamento) {
+      return res.status(404).json({ message: "Medicamento no encontrado." });
+    }
+    
+    // Guardar información del medicamento para el registro de actividad
+    const infoMedicamento = {
+      CodMedicamento: medicamento.CodMedicamento,
+      descripcionMed: medicamento.descripcionMed,
+      stock: medicamento.stock,
+      precio: medicamento.precio
+    };
+    
     const deleted = await Medicamento.destroy({ where: { CodMedicamento: id } });
-    if (!deleted) return res.status(404).json({ message: "No encontrado." });
+      // Registrar actividad
+    try {
+      console.log("Registrando eliminación de medicamento - Usuario:", {
+        userId: req.userId,
+        medicamentoId: id,
+        medicamentoNombre: infoMedicamento.descripcionMed
+      });
+      
+      if (!req.userId) {
+        console.warn("⚠️ No hay ID de usuario disponible para registrar la actividad de eliminación");
+      }
+      
+      await registrarActividad(
+        'eliminacion',
+        `Se eliminó el medicamento: ${infoMedicamento.descripcionMed}`,
+        'medicamento',
+        id,
+        req.userId,
+        { medicamentoEliminado: infoMedicamento }
+      );
+    } catch (err) {
+      console.error("Error al registrar actividad de eliminación de medicamento:", err);
+    }
+    
     res.json({ message: "Eliminado correctamente." });
   } catch (err) {
+    console.error("Error al eliminar medicamento:", err);
     res.status(500).json({ error: err.message });
   }
 };

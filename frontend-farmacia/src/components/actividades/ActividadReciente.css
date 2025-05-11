@@ -1,0 +1,43 @@
+.actividad-reciente h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.5rem;
+}
+
+.filtros-actividad {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-reciente table {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-reciente th {
+  background-color: #3498db;
+  color: white;
+}
+
+.actividad-reciente .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.actividad-reciente .badge {
+  padding: 8px;
+  font-size: 0.8rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .actividad-reciente .table-responsive {
+    font-size: 0.9rem;
+  }
+  
+  .filtros-actividad .row {
+    margin-bottom: 1rem;
+  }
+}

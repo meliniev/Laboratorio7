@@ -7,11 +7,10 @@ const FormularioMedicamento = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const esEdicion = !!id;
-  
-  const [laboratorios, setLaboratorios] = useState([]);  const [formData, setFormData] = useState({
+    const [laboratorios, setLaboratorios] = useState([]);  const [formData, setFormData] = useState({
     descripcionMed: '',
-    fechaFabricacion: '',
-    fechaVencimiento: '',
+    FechaFabricacion: '',
+    FechaCaducidad: '',
     Presentacion: '',
     stock: '',
     precioVentaUni: '',
@@ -44,8 +43,8 @@ const FormularioMedicamento = () => {
           const response = await ServicioFarmacia.obtenerMedicamentoPorId(id);          const medicamento = response.data;
           setFormData({
             descripcionMed: medicamento.descripcionMed || '',
-            fechaFabricacion: medicamento.fechaFabricacion ? new Date(medicamento.fechaFabricacion).toISOString().split('T')[0] : '',
-            fechaVencimiento: medicamento.fechaVencimiento ? new Date(medicamento.fechaVencimiento).toISOString().split('T')[0] : '',
+            FechaFabricacion: medicamento.FechaFabricacion ? new Date(medicamento.FechaFabricacion).toISOString().split('T')[0] : '',
+            FechaCaducidad: medicamento.FechaCaducidad ? new Date(medicamento.FechaCaducidad).toISOString().split('T')[0] : '',
             Presentacion: medicamento.Presentacion || '',
             stock: medicamento.stock || '',
             precioVentaUni: medicamento.precioVentaUni || '',
@@ -84,6 +83,18 @@ const FormularioMedicamento = () => {
         setError("Por favor, completa todos los campos obligatorios.");
         setLoading(false);
         return;
+      }
+      
+      // Validar que la fecha de caducidad sea posterior a la fecha de fabricación
+      if (formData.FechaFabricacion && formData.FechaCaducidad) {
+        const fechaFabricacion = new Date(formData.FechaFabricacion);
+        const fechaCaducidad = new Date(formData.FechaCaducidad);
+        
+        if (fechaCaducidad <= fechaFabricacion) {
+          setError("La fecha de caducidad debe ser posterior a la fecha de fabricación.");
+          setLoading(false);
+          return;
+        }
       }
       
       // Preparar datos
@@ -131,27 +142,31 @@ const FormularioMedicamento = () => {
             required
           />
         </div>
-        
-        <div className="form-group">
-          <label htmlFor="fechaFabricacion">Fecha de Fabricación</label>
+          <div className="form-group">
+          <label htmlFor="FechaFabricacion">Fecha de Fabricación</label>
           <input
             type="date"
-            id="fechaFabricacion"
-            name="fechaFabricacion"
-            value={formData.fechaFabricacion}
+            id="FechaFabricacion"
+            name="FechaFabricacion"
+            value={formData.FechaFabricacion}
             onChange={handleChange}
           />
         </div>
         
         <div className="form-group">
-          <label htmlFor="fechaVencimiento">Fecha de Vencimiento</label>
+          <label htmlFor="FechaCaducidad">Fecha de Caducidad</label>
           <input
             type="date"
-            id="fechaVencimiento"
-            name="fechaVencimiento"
-            value={formData.fechaVencimiento}
+            id="FechaCaducidad"
+            name="FechaCaducidad"
+            value={formData.FechaCaducidad}
             onChange={handleChange}
           />
+          {formData.FechaFabricacion && formData.FechaCaducidad && new Date(formData.FechaCaducidad) <= new Date(formData.FechaFabricacion) && (
+            <div className="error-mensaje">
+              La fecha de caducidad debe ser posterior a la fecha de fabricación
+            </div>
+          )}
         </div>
         
         <div className="form-group">

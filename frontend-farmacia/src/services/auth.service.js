@@ -1,15 +1,16 @@
 import axios from 'axios';
 
 // URL base de la API - Asegúrate que el servidor esté corriendo en este puerto
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth/';
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:10000/api';
+const API_URL = `${BASE_URL}/auth`;
 
 const registrar = (username, email, password) => {
-  return axios.post(`${API_URL}signup`, { username, email, password });
+  return axios.post(`${API_URL}/signup`, { username, email, password });
 };
 
 const iniciarSesion = (username, password) => {
   return axios
-    .post(`${API_URL}signin`, { username, password })
+    .post(`${API_URL}/signin`, { username, password })
     .then(response => {
       if (response.data.accessToken) {
         localStorage.setItem('usuario', JSON.stringify(response.data));

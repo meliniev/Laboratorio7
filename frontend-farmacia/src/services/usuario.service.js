@@ -1,13 +1,18 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/';
+// URLs base para las APIs
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:10000/api';
+const AUTH_URL = `${BASE_URL}/auth`;
+const ADMIN_URL = `${BASE_URL}/admin`;
 
 /**
  * SERVICIOS PARA GESTIÓN DE USUARIOS
  */
 const obtenerUsuarios = () => {
-  return axios.get(API_URL + 'admin/users', { headers: authHeader() })
+  console.log("URL de obtenerUsuarios:", `${ADMIN_URL}/users`);
+  console.log("Headers:", authHeader());
+  return axios.get(`${ADMIN_URL}/users`, { headers: authHeader() })
     .catch(error => {
       console.error("Error en obtenerUsuarios:", error);
       throw error;
@@ -15,7 +20,7 @@ const obtenerUsuarios = () => {
 };
 
 const obtenerUsuarioPorId = (id) => {
-  return axios.get(API_URL + `admin/users/${id}`, { headers: authHeader() })
+  return axios.get(`${ADMIN_URL}/users/${id}`, { headers: authHeader() })
     .catch(error => {
       console.error("Error en obtenerUsuarioPorId:", error);
       throw error;
@@ -23,7 +28,7 @@ const obtenerUsuarioPorId = (id) => {
 };
 
 const crearUsuario = (usuario) => {
-  return axios.post(API_URL + 'auth/signup', usuario)
+  return axios.post(`${AUTH_URL}/signup`, usuario)
     .catch(error => {
       console.error("Error en crearUsuario:", error);
       throw error;
@@ -31,7 +36,7 @@ const crearUsuario = (usuario) => {
 };
 
 const actualizarUsuario = (id, usuario) => {
-  return axios.put(API_URL + `admin/users/${id}`, usuario, { headers: authHeader() })
+  return axios.put(`${ADMIN_URL}/users/${id}`, usuario, { headers: authHeader() })
     .catch(error => {
       console.error("Error en actualizarUsuario:", error);
       throw error;
@@ -39,7 +44,7 @@ const actualizarUsuario = (id, usuario) => {
 };
 
 const eliminarUsuario = (id) => {
-  return axios.delete(API_URL + `admin/users/${id}`, { headers: authHeader() })
+  return axios.delete(`${ADMIN_URL}/users/${id}`, { headers: authHeader() })
     .catch(error => {
       console.error("Error en eliminarUsuario:", error);
       throw error;
@@ -47,7 +52,7 @@ const eliminarUsuario = (id) => {
 };
 
 const obtenerRoles = () => {
-  return axios.get(API_URL + 'roles', { headers: authHeader() })
+  return axios.get(`${AUTH_URL}/roles`, { headers: authHeader() })
     .catch(error => {
       console.error("Error en obtenerRoles:", error);
       throw error;

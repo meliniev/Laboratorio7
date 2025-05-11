@@ -8,6 +8,7 @@ const BarraNavegacion = () => {
   const estaAutenticado = ServicioAutenticacion.estaAutenticado();
   const usuarioActual = estaAutenticado ? ServicioAutenticacion.obtenerUsuarioActual() : null;
   const esAdmin = usuarioActual?.roles?.includes('ROLE_ADMIN');
+  const esModerador = usuarioActual?.roles?.includes('ROLE_MODERATOR');
   const location = useLocation();
   
   // Función para determinar si un enlace está activo
@@ -35,10 +36,14 @@ const BarraNavegacion = () => {
             )}
             
             <Link to="/ordenes-compra" className={enlaceActivo('/ordenes-compra')}>Órdenes de Compra</Link>
-            
-            {/* Solo para administradores */}
+              {/* Solo para administradores */}
             {esAdmin && (
               <Link to="/usuarios" className={enlaceActivo('/usuarios')}>Usuarios</Link>
+            )}
+            
+            {/* Solo para moderadores y administradores */}
+            {(esAdmin || esModerador) && (
+              <Link to="/actividades" className={enlaceActivo('/actividades')}>Actividad Reciente</Link>
             )}
             
             <div className="usuario-info">

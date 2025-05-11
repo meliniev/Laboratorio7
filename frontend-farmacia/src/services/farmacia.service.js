@@ -1,7 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = process.env.REACT_APP_API_URL_FARMACIA || 'http://localhost:5000/api/farmacia/';
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:10000/api';
+const API_URL = `${BASE_URL}/farmacia`;
 
 // Servicio para la comunicación con la API de farmacia
 
@@ -9,7 +10,7 @@ const API_URL = process.env.REACT_APP_API_URL_FARMACIA || 'http://localhost:5000
  * SERVICIOS PARA MEDICAMENTOS
  */
 const obtenerMedicamentos = () => {
-  return axios.get(API_URL + 'medicamentos', { headers: authHeader() })
+  return axios.get(`${API_URL}/medicamentos`, { headers: authHeader() })
     .then(response => {
       // Los datos ya vienen en el formato correcto del backend
       return response;
@@ -21,7 +22,7 @@ const obtenerMedicamentos = () => {
 };
 
 const obtenerMedicamentoPorId = (id) => {
-  return axios.get(API_URL + `medicamentos/${id}`, { headers: authHeader() })
+  return axios.get(`${API_URL}/medicamentos/${id}`, { headers: authHeader() })
     .then(response => {
       // Los datos ya vienen en el formato correcto del backend
       return response;
@@ -40,7 +41,7 @@ const crearMedicamento = (medicamento) => {
     CodLab: medicamento.CodLab ? parseInt(medicamento.CodLab) : null
   };
   
-  return axios.post(API_URL + 'medicamentos', medicamentoData, { headers: authHeader() })
+  return axios.post(`${API_URL}/medicamentos`, medicamentoData, { headers: authHeader() })
     .catch(error => {
       console.error("Error en crearMedicamento:", error);
       throw error;
@@ -55,7 +56,7 @@ const actualizarMedicamento = (id, medicamento) => {
     CodLab: medicamento.CodLab ? parseInt(medicamento.CodLab) : null
   };
   
-  return axios.put(API_URL + `medicamentos/${id}`, medicamentoData, { headers: authHeader() })
+  return axios.put(`${API_URL}/medicamentos/${id}`, medicamentoData, { headers: authHeader() })
     .catch(error => {
       console.error("Error en actualizarMedicamento:", error);
       throw error;
@@ -63,14 +64,14 @@ const actualizarMedicamento = (id, medicamento) => {
 };
 
 const eliminarMedicamento = (id) => {
-  return axios.delete(API_URL + `medicamentos/${id}`, { headers: authHeader() });
+  return axios.delete(`${API_URL}/medicamentos/${id}`, { headers: authHeader() });
 };
 
 /**
  * SERVICIOS PARA LABORATORIOS
  */
 const obtenerLaboratorios = () => {
-  return axios.get(API_URL + 'laboratorios', { headers: authHeader() })
+  return axios.get(`${API_URL}/laboratorios`, { headers: authHeader() })
     .then(response => {
       // Transformar nombres de campos para el frontend
       const labsTransformados = response.data.map(lab => ({
@@ -86,7 +87,7 @@ const obtenerLaboratorios = () => {
 };
 
 const obtenerLaboratorioPorId = (id) => {
-  return axios.get(API_URL + `laboratorios/${id}`, { headers: authHeader() })
+  return axios.get(`${API_URL}/laboratorios/${id}`, { headers: authHeader() })
     .then(response => {
       // Transformar nombres de campos para el frontend
       const labTransformado = {
@@ -110,7 +111,7 @@ const crearLaboratorio = (laboratorio) => {
     email: laboratorio.email,
     contacto: laboratorio.contacto || ''
   };
-  return axios.post(API_URL + 'laboratorios', labParaBackend, { headers: authHeader() });
+  return axios.post(`${API_URL}/laboratorios`, labParaBackend, { headers: authHeader() });
 };
 
 const actualizarLaboratorio = (id, laboratorio) => {
@@ -122,18 +123,18 @@ const actualizarLaboratorio = (id, laboratorio) => {
     email: laboratorio.email,
     contacto: laboratorio.contacto || ''
   };
-  return axios.put(API_URL + `laboratorios/${id}`, labParaBackend, { headers: authHeader() });
+  return axios.put(`${API_URL}/laboratorios/${id}`, labParaBackend, { headers: authHeader() });
 };
 
 const eliminarLaboratorio = (id) => {
-  return axios.delete(API_URL + `laboratorios/${id}`, { headers: authHeader() });
+  return axios.delete(`${API_URL}/laboratorios/${id}`, { headers: authHeader() });
 };
 
 /**
  * SERVICIOS PARA ÓRDENES DE COMPRA
  */
 const obtenerOrdenesCompra = () => {
-  return axios.get(API_URL + 'ordenes-compra', { headers: authHeader() })
+  return axios.get(`${API_URL}/ordenes-compra`, { headers: authHeader() })
     .then(response => {
       // Dejamos los datos tal como vienen del backend para mantener coherencia con el modelo
       return response;
@@ -145,7 +146,7 @@ const obtenerOrdenesCompra = () => {
 };
 
 const obtenerOrdenCompraPorId = (id) => {
-  return axios.get(API_URL + `ordenes-compra/${id}`, { headers: authHeader() })
+  return axios.get(`${API_URL}/ordenes-compra/${id}`, { headers: authHeader() })
     .then(response => {
       // Dejamos los datos tal como vienen del backend para mantener coherencia con el modelo
       return response;
@@ -166,7 +167,7 @@ const crearOrdenCompra = (orden) => {
     CodLab: parseInt(orden.CodLab)
   };
   
-  return axios.post(API_URL + 'ordenes-compra', ordenData, { headers: authHeader() })
+  return axios.post(`${API_URL}/ordenes-compra`, ordenData, { headers: authHeader() })
     .catch(error => {
       console.error("Error en crearOrdenCompra:", error);
       throw error;
@@ -183,7 +184,7 @@ const actualizarOrdenCompra = (id, orden) => {
     CodLab: parseInt(orden.CodLab)
   };
   
-  return axios.put(API_URL + `ordenes-compra/${id}`, ordenData, { headers: authHeader() })
+  return axios.put(`${API_URL}/ordenes-compra/${id}`, ordenData, { headers: authHeader() })
     .catch(error => {
       console.error("Error en actualizarOrdenCompra:", error);
       throw error;
@@ -191,30 +192,30 @@ const actualizarOrdenCompra = (id, orden) => {
 };
 
 const eliminarOrdenCompra = (id) => {
-  return axios.delete(API_URL + `ordenes-compra/${id}`, { headers: authHeader() });
+  return axios.delete(`${API_URL}/ordenes-compra/${id}`, { headers: authHeader() });
 };
 
 /**
  * SERVICIOS PARA DETALLES DE ORDEN DE COMPRA
  */
 const obtenerDetallesOrden = () => {
-  return axios.get(API_URL + 'detalles-orden', { headers: authHeader() });
+  return axios.get(`${API_URL}/detalles-orden`, { headers: authHeader() });
 };
 
 const obtenerDetallePorIds = (ordenId, medicamentoId) => {
-  return axios.get(API_URL + `detalles-orden/${ordenId}/${medicamentoId}`, { headers: authHeader() });
+  return axios.get(`${API_URL}/detalles-orden/${ordenId}/${medicamentoId}`, { headers: authHeader() });
 };
 
 const crearDetalleOrden = (detalle) => {
-  return axios.post(API_URL + 'detalles-orden', detalle, { headers: authHeader() });
+  return axios.post(`${API_URL}/detalles-orden`, detalle, { headers: authHeader() });
 };
 
 const actualizarDetalleOrden = (ordenId, medicamentoId, detalle) => {
-  return axios.put(API_URL + `detalles-orden/${ordenId}/${medicamentoId}`, detalle, { headers: authHeader() });
+  return axios.put(`${API_URL}/detalles-orden/${ordenId}/${medicamentoId}`, detalle, { headers: authHeader() });
 };
 
 const eliminarDetalleOrden = (ordenId, medicamentoId) => {
-  return axios.delete(API_URL + `detalles-orden/${ordenId}/${medicamentoId}`, { headers: authHeader() });
+  return axios.delete(`${API_URL}/detalles-orden/${ordenId}/${medicamentoId}`, { headers: authHeader() });
 };
 
 const ServicioFarmacia = {

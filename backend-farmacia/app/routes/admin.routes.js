@@ -4,7 +4,8 @@ import {
   listUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  listRoles
 } from "../controllers/admin.controller.js";
 
 const router = express.Router();
@@ -20,5 +21,8 @@ router.put("/users/:id", [verifyToken, isAdmin], updateUser);
 
 // Eliminar un usuario (solo admin)
 router.delete("/users/:id", [verifyToken, isAdmin], deleteUser);
+
+// Listar todos los roles disponibles (solo admin)
+router.get("/roles", [verifyToken, isAdmin], listRoles);
 
 export default router;

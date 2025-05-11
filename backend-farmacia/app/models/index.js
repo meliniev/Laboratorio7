@@ -6,6 +6,7 @@ import MedicamentoModel from "./Medicamento.js";
 import OrdenCompraModel from "./OrdenCompra.js";
 import DetalleOrdenCompraModel from "./DetalleOrdenCompra.js";
 import LaboratorioModel from "./Laboratorio.js";
+import ActividadModel from "./Actividad.js";
 
 const db = {};
 db.Sequelize = Sequelize;
@@ -18,6 +19,7 @@ db.Medicamento = MedicamentoModel(sequelize, Sequelize);
 db.OrdenCompra = OrdenCompraModel(sequelize, Sequelize);
 db.DetalleOrdenCompra = DetalleOrdenCompraModel(sequelize, Sequelize);
 db.Laboratorio = LaboratorioModel(sequelize, Sequelize);
+db.Actividad = ActividadModel(sequelize, Sequelize);
 
 
 db.role.belongsToMany(db.user, {
@@ -47,5 +49,9 @@ db.DetalleOrdenCompra.belongsTo(db.OrdenCompra, { foreignKey: 'NroOrdenC' });
 // Asociaciones entre Medicamento y DetalleOrdenCompra
 db.Medicamento.hasMany(db.DetalleOrdenCompra, { foreignKey: 'CodMedicamento' });
 db.DetalleOrdenCompra.belongsTo(db.Medicamento, { foreignKey: 'CodMedicamento' });
+
+// Asociación entre Usuario y Actividad
+db.user.hasMany(db.Actividad, { foreignKey: 'idUsuario' });
+db.Actividad.belongsTo(db.user, { foreignKey: 'idUsuario' });
 
 export default db;

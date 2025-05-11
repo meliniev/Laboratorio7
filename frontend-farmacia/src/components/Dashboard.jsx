@@ -122,12 +122,6 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      
-      {/* Actividad reciente - para una futura implementación */}
-      <h2 className="dashboard-section-title">Actividad Reciente</h2>
-      <div className="activity-container">
-        <p className="no-activity">No hay actividad reciente para mostrar.</p>
-      </div>
     </div>
   );
 };

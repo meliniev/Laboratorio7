@@ -5,12 +5,21 @@ import authRoutes from "./app/routes/auth.routes.js";
 import userRoutes from "./app/routes/user.routes.js";
 import adminRoutes from "./app/routes/admin.routes.js";
 import farmaciaRoutes from "./app/routes/farmacia.routes.js";
+import actividadRoutes from "./app/routes/actividad.routes.js";
 import dotenv from "dotenv";
+import initialize from "./init.js";
 
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: process.env.CORS_ORIGIN }));
+
+// Configuración de CORS
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || ["http://localhost:3000", "https://farmacia-frontend.onrender.com"],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -20,17 +29,29 @@ app.get("/", (req, res) =>
 );
 
 // Autenticación y rutas protegidas
-app.use("/api/auth",   authRoutes);
-app.use("/api/users",  userRoutes);
-app.use("/api/admin",  adminRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/farmacia", farmaciaRoutes);
+app.use("/api/actividades", actividadRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
-db.sequelize
-  .sync({ force: false })  // force: true para drop/create tablas
-  .then(() => {
+const startServer = async () => {
+  try {
+    // Si estamos en Render o es la primera ejecución
+    if (process.env.RENDER || process.env.INIT_DB) {
+      await initialize();
+    }
+
+    // Sincronizar base de datos sin recrear tablas
+    await db.sequelize.sync({ force: false });
     console.log("✅ BD sincronizada.");
+    
     app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}.`));
-  })
-  .catch(err => console.error("❌ Error al sincronizar BD:", err));
+  } catch (err) {
+    console.error("❌ Error al iniciar servidor:", err);
+  }
+};
+
+startServer();

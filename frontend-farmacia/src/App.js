@@ -9,6 +9,11 @@ import ListaLaboratorios from './components/laboratorios/ListaLaboratorios';
 import FormularioLaboratorio from './components/laboratorios/FormularioLaboratorio';
 import ListaOrdenes from './components/ordenes/ListaOrdenes';
 import DetalleOrden from './components/ordenes/DetalleOrden';
+import FormularioOrden from './components/ordenes/FormularioOrden';
+import AgregarMedicamentoOrden from './components/ordenes/AgregarMedicamentoOrden';
+import ListaUsuarios from './components/usuarios/ListaUsuarios';
+import FormularioUsuario from './components/usuarios/FormularioUsuario';
+import ActividadReciente from './components/actividades/ActividadReciente';
 import ServicioAutenticacion from './services/auth.service';
 import './App.css';
 
@@ -23,6 +28,17 @@ const RutaAdmin = ({ children }) => {
   const esAdmin = usuario?.roles?.includes('ROLE_ADMIN');
   
   return ServicioAutenticacion.estaAutenticado() && esAdmin ? 
+    children : 
+    <Navigate to="/dashboard" />;
+};
+
+// Componente para rutas de moderador o administrador
+const RutaModeradorOAdmin = ({ children }) => {
+  const usuario = ServicioAutenticacion.obtenerUsuarioActual();
+  const esAdmin = usuario?.roles?.includes('ROLE_ADMIN');
+  const esModerador = usuario?.roles?.includes('ROLE_MODERATOR');
+  
+  return ServicioAutenticacion.estaAutenticado() && (esAdmin || esModerador) ? 
     children : 
     <Navigate to="/dashboard" />;
 };
@@ -92,10 +108,49 @@ function App() {
               <ListaOrdenes />
             </RutaProtegida>
           } />
+          <Route path="/ordenes-compra/nueva" element={
+            <RutaAdmin>
+              <FormularioOrden />
+            </RutaAdmin>
+          } />
+          <Route path="/ordenes-compra/editar/:id" element={
+            <RutaAdmin>
+              <FormularioOrden />
+            </RutaAdmin>
+          } />
           <Route path="/ordenes-compra/:id" element={
             <RutaProtegida>
               <DetalleOrden />
             </RutaProtegida>
+          } />
+          <Route path="/ordenes-compra/:id/agregar-medicamento" element={
+            <RutaAdmin>
+              <AgregarMedicamentoOrden />
+            </RutaAdmin>
+          } />
+          
+          {/* Rutas de usuarios */}
+          <Route path="/usuarios" element={
+            <RutaAdmin>
+              <ListaUsuarios />
+            </RutaAdmin>
+          } />
+          <Route path="/usuarios/nuevo" element={
+            <RutaAdmin>
+              <FormularioUsuario />
+            </RutaAdmin>
+          } />
+          <Route path="/usuarios/editar/:id" element={
+            <RutaAdmin>
+              <FormularioUsuario />
+            </RutaAdmin>
+          } />
+          
+          {/* Ruta de actividades recientes */}
+          <Route path="/actividades" element={
+            <RutaModeradorOAdmin>
+              <ActividadReciente />
+            </RutaModeradorOAdmin>
           } />
           
           {/* Ruta por defecto - 404 */}
