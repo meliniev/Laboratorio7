@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ServicioFarmacia from '../../services/farmacia.service';
 import ServicioAutenticacion from '../../services/auth.service';
+import { NotificacionProvider } from '../notificaciones/Notificacion';
 import './Medicamentos.css';
 
 const ListaMedicamentos = () => {
@@ -9,6 +10,7 @@ const ListaMedicamentos = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [usuario, setUsuario] = useState(null);
+  const { exito, error: mostrarError, advertencia } = useContext(NotificacionProvider);
   
   useEffect(() => {
     const usuarioActual = ServicioAutenticacion.obtenerUsuarioActual();
@@ -21,26 +23,25 @@ const ListaMedicamentos = () => {
     try {
       setLoading(true);
       const response = await ServicioFarmacia.obtenerMedicamentos();
-      setMedicamentos(response.data);
-      setError(null);
+      setMedicamentos(response.data);      setError(null);
     } catch (err) {
       console.error("Error al cargar medicamentos:", err);
       setError("No se pudieron cargar los medicamentos. Por favor, intenta de nuevo.");
+      mostrarError("No se pudieron cargar los medicamentos");
     } finally {
       setLoading(false);
     }
   };
-  
-  const eliminarMedicamento = async (id) => {
-    if (window.confirm('¿Estás seguro de eliminar este medicamento?')) {
-      try {
-        await ServicioFarmacia.eliminarMedicamento(id);
-        cargarMedicamentos(); // Recargar la lista
-        alert('Medicamento eliminado con éxito.');
-      } catch (err) {
-        console.error("Error al eliminar medicamento:", err);
-        alert('No se pudo eliminar el medicamento.');
-      }
+    const eliminarMedicamento = async (id) => {
+    // En lugar de window.confirm, podemos usar el componente de notificaciones
+    try {
+      advertencia("Eliminando medicamento...", 1000);
+      await ServicioFarmacia.eliminarMedicamento(id);
+      cargarMedicamentos(); // Recargar la lista
+      exito('Medicamento eliminado con éxito', 2000);
+    } catch (err) {
+      console.error("Error al eliminar medicamento:", err);
+      mostrarError('No se pudo eliminar el medicamento');
     }
   };
   

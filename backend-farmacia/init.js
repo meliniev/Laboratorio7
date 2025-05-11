@@ -21,7 +21,7 @@ const initialize = async () => {
     console.log('Roles creados');
 
     // Crear usuario admin por defecto
-    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin123', 8);
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin', 8);
     const admin = await User.create({
       username: process.env.ADMIN_USERNAME || 'admin',
       email: process.env.ADMIN_EMAIL || 'admin@farmacia.com',

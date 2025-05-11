@@ -15,6 +15,9 @@ const {
  */
 export const createMedicamento = async (req, res) => {
   try {
+    // Log para diagnóstico
+    console.log("Usuario que crea medicamento: ID =", req.userId);
+    
     // Validar campos obligatorios
     if (!req.body.descripcionMed || !req.body.stock) {
       return res.status(400).json({ error: "Los campos descripción y stock son obligatorios" });
@@ -50,16 +53,16 @@ export const createMedicamento = async (req, res) => {
       
       if (!req.userId) {
         console.warn("⚠️ No hay ID de usuario disponible para registrar la actividad de creación");
+      } else {
+        await registrarActividad(
+          'creacion',
+          `Se creó el medicamento: ${med.descripcionMed}`,
+          'medicamento',
+          med.CodMedicamento,
+          req.userId, // El ID del usuario que realiza la acción
+          { medicamento: med }
+        );
       }
-      
-      await registrarActividad(
-        'creacion',
-        `Se creó el medicamento: ${med.descripcionMed}`,
-        'medicamento',
-        med.CodMedicamento,
-        req.userId, // El ID del usuario que realiza la acción
-        { medicamento: med }
-      );
     } catch (err) {
       console.error("Error al registrar actividad:", err);
     }

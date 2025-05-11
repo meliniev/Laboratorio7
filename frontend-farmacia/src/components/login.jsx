@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import ServicioAutenticacion from '../services/auth.service';
+import { NotificacionProvider } from './notificaciones/Notificacion';
 import './login.css';
 
 function Login() {
@@ -8,24 +10,22 @@ function Login() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { exito, error: mostrarError } = useContext(NotificacionProvider);
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage('');
     setLoading(true);
     
-    try {
+    try {      
       const response = await ServicioAutenticacion.iniciarSesion(username, password);
-      setSuccess(true);
-      setMessage('Inicio de sesión exitoso. Redirigiendo...');
+      exito('Inicio de sesión exitoso', 2000);
       console.log('Respuesta de la API:', response);
       
-      // Redirigir después de un breve retraso
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);} catch (err) {
-      setSuccess(false);
+      // Redirigir inmediatamente
+      navigate('/dashboard');
+    } catch (err) {
       console.error('Error completo:', err);
       
       let errorMsg = 'Error de comunicación con el servidor';
@@ -42,46 +42,69 @@ function Login() {
       } else {
         // Error al configurar la petición
         console.error('Error al configurar la petición:', err.message);
-        errorMsg = `Error de configuración: ${err.message}`;
+        errorMsg = `Error de configuración: ${err.message}`;      
       }
       
       setMessage(errorMsg);
+      mostrarError(errorMsg, 3000);
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
-    <div className="login-container">
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>        <button type="submit" disabled={loading}>
-          {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-        </button>
-      </form>
-      {message && (
-        <div className={success ? "success-message" : "error-message"}>
-          {message}
-        </div>
-      )}
-    </div>
+    <Container className="login-container">
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <div className="login-card">
+            <h2 className="text-center mb-4">Iniciar Sesión</h2>
+            
+            {message && (
+              <Alert variant="danger" className="mt-3">
+                {message}
+              </Alert>
+            )}
+            
+            <Form onSubmit={handleLogin}>
+              <Form.Group className="mb-3" controlId="username">
+                <Form.Label>Nombre de Usuario</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Ingresa tu nombre de usuario"
+                  required
+                />
+              </Form.Group>
+              
+              <Form.Group className="mb-3" controlId="password">
+                <Form.Label>Contraseña</Form.Label>
+                <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Ingresa tu contraseña"
+                  required
+                />
+              </Form.Group>
+              
+              <Button 
+                variant="primary" 
+                type="submit" 
+                className="w-100 mt-3" 
+                disabled={loading}
+              >
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              </Button>
+            </Form>
+            
+            <div className="text-center mt-3">
+              ¿No tienes una cuenta? <Link to="/registro">Registrarse</Link>
+            </div>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

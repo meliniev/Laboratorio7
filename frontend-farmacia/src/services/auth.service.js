@@ -25,8 +25,7 @@ const iniciarSesion = (username, password) => {
 
 const cerrarSesion = () => {
   localStorage.removeItem('usuario');
-  // Opcionalmente, podemos redirigir al usuario a la página de login
-  window.location.href = '/login';
+  // Ya no recargamos la página - esto lo hará el componente CerrarSesion
 };
 
 // Verificar si el usuario está autenticado

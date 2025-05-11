@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServicioAutenticacion from '../services/auth.service';
+import { NotificacionProvider } from './notificaciones/Notificacion';
 import './CerrarSesion.css';
 
 const CerrarSesion = () => {
   const navigate = useNavigate();
+  const { exito } = useContext(NotificacionProvider);
 
   const handleCerrarSesion = () => {
-    // Confirmar si el usuario realmente quiere cerrar sesión
-    if (window.confirm('¿Estás seguro que deseas cerrar sesión?')) {
-      // Llamar al servicio de autenticación para cerrar sesión
-      ServicioAutenticacion.cerrarSesion();
-      
-      // Mostrar una notificación al usuario
-      alert('Has cerrado sesión exitosamente');
-      
-      // Redirigir al login (esto es opcional ya que el servicio ya hace la redirección)
-      navigate('/login');
-    }
+    // Llamar al servicio de autenticación para cerrar sesión
+    ServicioAutenticacion.cerrarSesion();
+    
+    // Mostrar una notificación al usuario
+    exito('Has cerrado sesión exitosamente', 2000);
+    
+    // Redirigir al login (esto es opcional ya que el servicio ya hace la redirección)
+    navigate('/login');
   };
 
   return (

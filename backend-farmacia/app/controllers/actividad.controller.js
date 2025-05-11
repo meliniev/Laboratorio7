@@ -5,17 +5,9 @@ const { Actividad, user: User } = db;
 // Registrar una nueva actividad en el sistema
 export const registrarActividad = async (tipoActividad, descripcion, entidad, idEntidad, idUsuario, detalles = null) => {
   try {
-    console.log("Registrando actividad:", {
-      tipo: tipoActividad,
-      descripcion: descripcion,
-      entidad: entidad,
-      idEntidad: idEntidad,
-      idUsuario: idUsuario || "No proporcionado"
-    });
-    
-    // Si no se proporcionó un ID de usuario, lo marcamos claramente en el log
+    // Si no se proporcionó un ID de usuario, lo marcamos claramente
     if (!idUsuario) {
-      console.warn("⚠️ Se está intentando registrar una actividad sin ID de usuario");
+      console.warn(`⚠️ Actividad sin usuario: ${tipoActividad} - ${descripcion}`);
     }
     
     const nuevaActividad = await Actividad.create({

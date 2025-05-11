@@ -5,8 +5,6 @@ import authConfig from "../config/auth.config.js";
 const { user: User, role: Role } = db;
 
 export const verifyToken = async (req, res, next) => {
-  console.log("Ejecutando verifyToken middleware");
-  console.log("Headers recibidos:", req.headers);
   // Obtener token de x-access-token o de Authorization (con o sin Bearer)
   let token = req.headers["x-access-token"] || req.headers.authorization;
   
@@ -20,19 +18,17 @@ export const verifyToken = async (req, res, next) => {
     if (token.startsWith("Bearer ")) {
       token = token.slice(7);
     }
-    console.log("Token procesado:", token);
-    
-    const decoded = jwt.verify(token, authConfig.secret);
+      const decoded = jwt.verify(token, authConfig.secret);
     req.userId = decoded.id;
-    console.log("ID de usuario decodificado:", req.userId);
     
     const user = await User.findByPk(req.userId);
     if (!user) {
-      console.log("Usuario no encontrado con ID:", req.userId);
       return res.status(401).json({ message: "Unauthorized!" });
     }
     
-    console.log("Usuario autenticado correctamente:", user.username);
+    // Guardamos el usuario en req para posible uso posterior
+    req.user = user;
+    
     next();
   } catch (err) {
     console.error("Error al verificar token:", err);

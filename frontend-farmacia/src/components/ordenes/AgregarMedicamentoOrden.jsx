@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ServicioFarmacia from '../../services/farmacia.service';
+import { NotificacionProvider } from '../notificaciones/Notificacion';
 import './Ordenes.css';
 
-const AgregarMedicamentoOrden = () => {
-  const { id } = useParams();
+const AgregarMedicamentoOrden = () => {  const { id } = useParams();
   const navigate = useNavigate();
+  const { exito: mostrarExito, error: mostrarError, advertencia: mostrarAdvertencia } = useContext(NotificacionProvider);
   
   const [formData, setFormData] = useState({
     CodMedicamento: '',
@@ -13,20 +14,18 @@ const AgregarMedicamentoOrden = () => {
     cantidad: '1',
     precio: '0.00',
     montouni: '0.00'
-  });    const [orden, setOrden] = useState(null);
+  });  const [orden, setOrden] = useState(null);
   const [medicamentos, setMedicamentos] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [medicamentoSeleccionado, setMedicamentoSeleccionado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [exito, setExito] = useState(false);
   
   useEffect(() => {
     const cargarDatos = async () => {
       try {
         setLoading(true);
-        
-        // Cargar la orden para asegurarnos que existe
+            // Cargar la orden para asegurarnos que existe
         const responseOrden = await ServicioFarmacia.obtenerOrdenCompraPorId(id);
         setOrden(responseOrden.data);
         
@@ -38,6 +37,7 @@ const AgregarMedicamentoOrden = () => {
       } catch (err) {
         console.error("Error al cargar datos:", err);
         setError("No se pudieron cargar los datos necesarios. Verifique su conexión.");
+        mostrarError("No se pudieron cargar los datos necesarios", 3000);
       } finally {
         setLoading(false);
       }
@@ -94,15 +94,15 @@ const AgregarMedicamentoOrden = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validar que se haya seleccionado un medicamento
+      // Validar que se haya seleccionado un medicamento
     if (!formData.CodMedicamento) {
       setError("Debe seleccionar un medicamento");
+      mostrarError("Debe seleccionar un medicamento", 3000);
       return;
     }
-    
-    try {
+      try {
       setLoading(true);
+      mostrarAdvertencia("Agregando medicamento a la orden...", 1000);
       
       // Preparar datos para enviar
       const detalleData = {
@@ -126,21 +126,20 @@ const AgregarMedicamentoOrden = () => {
       
       // Actualizar la orden con el nuevo total
       await ServicioFarmacia.actualizarOrdenCompra(id, {
-        ...ordenActual,
-        Total: nuevoTotal
+        ...ordenActual,        Total: nuevoTotal
       });
       
-      setExito(true);
       setError(null);
+      mostrarExito("Medicamento agregado a la orden con éxito", 2000);
       
       // Redireccionar al detalle de la orden
       setTimeout(() => {
         navigate(`/ordenes-compra/${id}`);
-      }, 1500);
-      
-    } catch (err) {
+      }, 1000);
+        } catch (err) {
       console.error("Error al agregar medicamento:", err);
       setError("No se pudo agregar el medicamento a la orden. Verifique los datos e intente nuevamente.");
+      mostrarError("No se pudo agregar el medicamento a la orden", 3000);
     } finally {
       setLoading(false);
     }
@@ -155,11 +154,9 @@ const AgregarMedicamentoOrden = () => {
   }
   
   return (
-    <div className="formulario-container">
-      <h2>Agregar Medicamento a Orden #{id}</h2>
+    <div className="formulario-container">      <h2>Agregar Medicamento a Orden #{id}</h2>
       
       {error && <div className="error">{error}</div>}
-      {exito && <div className="exito">El medicamento se ha agregado correctamente a la orden.</div>}
       
       <form onSubmit={handleSubmit} className="formulario">
         <div className="campo-form">
