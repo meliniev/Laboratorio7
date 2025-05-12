@@ -6,10 +6,19 @@ import userRoutes from "./app/routes/user.routes.js";
 import adminRoutes from "./app/routes/admin.routes.js";
 import farmaciaRoutes from "./app/routes/farmacia.routes.js";
 import actividadRoutes from "./app/routes/actividad.routes.js";
+import healthRoutes from "./app/routes/health.routes.js";
 import dotenv from "dotenv";
 import initialize from "./init.js";
 
 dotenv.config();
+
+// Información sobre el entorno
+console.log('🚀 Iniciando servidor...');
+console.log(`📊 Entorno: ${process.env.NODE_ENV || 'development'}`);
+console.log(`🔌 Puerto: ${process.env.PORT || 10000}`);
+console.log(`💾 Base de datos: ${process.env.DB_DIALECT || 'mysql'}`);
+console.log(`🔐 SSL: ${process.env.DB_SSL || 'false'}`);
+console.log(`🌐 CORS: ${process.env.CORS_ORIGIN || 'http://localhost:3000'}`);
 
 const app = express();
 
@@ -34,6 +43,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/farmacia", farmaciaRoutes);
 app.use("/api/actividades", actividadRoutes);
+app.use("/api", healthRoutes);
 
 const PORT = process.env.PORT || 10000;
 

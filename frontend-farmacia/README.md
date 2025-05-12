@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# 🏥 Frontend App Farmacia
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🔧 Instalación y Configuración Local
 
-## Available Scripts
+### 1. Acceder al directorio del proyecto:
+```bash
+cd app-farmacia/frontend-farmacia
+```
 
-In the project directory, you can run:
+### 2. Instalar dependencias:
+```bash
+npm install
+```
 
-### `yarn start`
+### 3. Configurar variables de entorno:
+Crea un archivo `.env` en la raíz del frontend con el siguiente contenido:
+```env
+REACT_APP_API_URL=http://localhost:1000/api
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 4. Iniciar la aplicación en modo desarrollo:
+```bash
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 5. Construir la aplicación para producción:
+```bash
+npm run build
+```
 
-### `yarn test`
+## 🚀 Despliegue en Render
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Preparar el proyecto para producción
 
-### `yarn build`
+Asegúrate de que tu aplicación esté lista para producción:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Construye la aplicación:
+```bash
+npm run build
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Verifica que la carpeta `build` se haya creado correctamente.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Crear el Static Site en Render
 
-### `yarn eject`
+1. Accede a tu cuenta de Render
+2. Ve a **Dashboard** y selecciona **New Static Site**
+3. Conecta con tu repositorio de GitHub
+4. Configura el servicio:
+   - **Name**: `app-farmacia`
+   - **Branch**: main
+   - **Region**: selecciona la misma región que tu backend
+   - **Root Directory**: `frontend-farmacia` (¡Importante en estructura de monorepo!)
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `build`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 3. Configurar variables de entorno
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+En la sección **Environment Variables** de Render, haz clic en **Add from .env** y pega:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+REACT_APP_API_URL=https://backend-farmacia.onrender.com/api
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+⚠️ **Importante**: Reemplaza la URL con la de tu backend desplegado en Render.
 
-## Learn More
+### 4. Iniciar despliegue
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Haz clic en **Create Static Site** para iniciar el despliegue.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 5. Verificar despliegue
 
-### Code Splitting
+Una vez que el despliegue haya finalizado, podrás acceder a tu aplicación en la URL proporcionada por Render:
+```
+https://app-farmacia.onrender.com
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 6. Problemas comunes y soluciones
 
-### Analyzing the Bundle Size
+1. **Rutas**: La aplicación React necesita configurarse para manejar rutas correctamente. Asegúrate de que estás usando `BrowserRouter` en tu aplicación.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+2. **CORS**: Si tienes problemas de CORS, verifica que el backend tenga configurado correctamente los orígenes permitidos.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. **Variables de entorno**: Recuerda que en React, las variables de entorno deben comenzar con `REACT_APP_` para ser accesibles desde la aplicación.

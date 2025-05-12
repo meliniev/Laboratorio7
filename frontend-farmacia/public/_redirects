@@ -1,0 +1,3 @@
+# Redireccionamientos para aplicación SPA (Single Page Application)
+# Todas las rutas que no sean archivos estáticos se redirigen al index.html
+/*    /index.html   200

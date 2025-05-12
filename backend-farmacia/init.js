@@ -27,7 +27,7 @@ const initialize = async () => {
       email: process.env.ADMIN_EMAIL || 'admin@farmacia.com',
       password: hashedPassword
     });
-
+    
     // Asignar rol de admin
     const adminRole = await Role.findOne({ where: { name: 'admin' } });
     await admin.addRole(adminRole);
