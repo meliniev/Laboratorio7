@@ -14,7 +14,7 @@ Esta guía te ayudará a desplegar tu aplicación completa de farmacia en Render
 2. Haz clic en **New** → **PostgreSQL**
 3. Completa los siguientes campos:
    - **Name**: `bd-farmacia-postgres`
-   - **Database**: `bd_farmacia`
+   - **Database**: `bd_farmacia` (Nota: Render creará un nombre diferente para la base de datos)
    - **User**: se generará automáticamente
    - **Region**: selecciona la más cercana a tus usuarios
    - **Instance Type**: Free (o el plan que prefieras)
@@ -22,6 +22,8 @@ Esta guía te ayudará a desplegar tu aplicación completa de farmacia en Render
 5. Render creará tu base de datos y mostrará la información de conexión
 
 ⚠️ **Guarda esta información** ya que la necesitarás para configurar tu backend
+
+> ⚠️ **IMPORTANTE**: Render asigna un nombre propio a la base de datos que es diferente al que indicaste. Debes usar ese nombre en la configuración. Lo puedes encontrar en la sección "Connections" dentro de los detalles de tu base de datos.
 
 ## 🔧 Paso 2: Desplegar el Backend
 
@@ -32,13 +34,13 @@ Esta guía te ayudará a desplegar tu aplicación completa de farmacia en Render
    - **Runtime**: Node
    - **Branch**: main
    - **Region**: selecciona la misma región que tu base de datos
-   - **Root Directory**: `backend-farmacia`
-   - **Build Command**: `npm install pg pg-hstore && npm install` (Render añadirá automáticamente el prefijo `backend-farmacia/`)
+   - **Root Directory**: `backend-farmacia`   - **Build Command**: `npm install pg pg-hstore && npm install` (Render añadirá automáticamente el prefijo `backend-farmacia/`)
    - **Start Command**: `node server.js` (Render añadirá automáticamente el prefijo `backend-farmacia/`)
    - **Instance Type**: Free
 4. En la sección **Environment Variables**, haz clic en el botón **Add from .env** y pega el siguiente contenido:
    ```
-   DB_NAME=bd_farmacia
+   # IMPORTANTE: Usa el nombre exacto de la base de datos que genera Render, no bd_farmacia
+   DB_NAME=nombre_correcto_de_la_base_de_datos_en_render
    DB_USER=usuario_generado_por_render
    DB_PASSWORD=contraseña_generada_por_render
    DB_HOST=host_de_postgres_render
@@ -110,6 +112,7 @@ Si encuentras algún problema durante el despliegue:
    
 2. **Error de conexión a la base de datos**: 
    - Verifica que las variables de entorno de conexión sean correctas
+   - **Error `database "bd_farmacia" does not exist`**: Este error ocurre porque Render crea su propia base de datos. Debes usar el nombre de base de datos que proporciona Render, no "bd_farmacia". Revisa la sección "External Database URL" en los detalles de tu base de datos en Render y actualiza la variable `DB_NAME`.
    - Asegúrate de que la base de datos PostgreSQL esté en la misma región que tu servicio
    - Comprueba que el formato de la URL de conexión sea correcto
 
@@ -139,3 +142,20 @@ Render proporciona herramientas para monitorear el rendimiento de tu aplicación
 1. Ve a tu servicio de backend -> **Metrics** para ver el uso de CPU, memoria y red
 2. Configura alertas en **Alerts** para recibir notificaciones de problemas
 3. Si necesitas más rendimiento, puedes actualizar tu plan en **Settings**
+
+## 🧪 Verificación de la Base de Datos PostgreSQL
+
+Si encuentras errores relacionados con la base de datos como `database "bd_farmacia" does not exist`, verifica que estás utilizando correctamente la información de PostgreSQL proporcionada por Render:
+
+1. Ve a tu servicio de PostgreSQL en Render (bd-farmacia-postgres)
+2. En la sección **Info**, encontrarás los siguientes datos importantes:
+   - **Hostname**: Debe usarse como valor para `DB_HOST` 
+   - **Port**: Debe ser 5432 (valor para `DB_PORT`)
+   - **Database**: Este es el nombre REAL de la base de datos generado por Render (usar como `DB_NAME`)
+   - **Username**: El usuario generado por Render (usar como `DB_USER`)
+   - **Password**: La contraseña generada por Render (usar como `DB_PASSWORD`)
+   - **Internal Database URL**: Contiene toda la información en formato de URL
+
+3. Actualiza las variables de entorno en tu servicio backend con estos valores exactos
+4. Recuerda que para PostgreSQL en Render debes establecer `DB_SSL=true`
+5. Reinicia el servicio después de actualizar las variables de entorno

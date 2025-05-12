@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base de la API - Asegúrate que el servidor esté corriendo en este puerto
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:10000/api';
+const BASE_URL = process.env.REACT_APP_API_URL;
 const API_URL = `${BASE_URL}/auth`;
 
 const registrar = (username, email, password) => {
