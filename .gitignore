@@ -16,3 +16,5 @@ frontend/coverage/
 .DS_Store
 .env.local
 *.tmp
+
+.vscode/

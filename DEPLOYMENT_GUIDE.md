@@ -74,7 +74,7 @@ Esta guía te ayudará a desplegar tu aplicación completa de farmacia en Render
 4. En la sección **Environment Variables**, haz clic en el botón **Add from .env** y pega:
    ```
    REACT_APP_API_URL=https://backend-farmacia.onrender.com/api
-   ```   > ⚠️ Reemplaza la URL con la URL real de tu backend en Render.
+   ```   > ⚠️ Reemplaza la URL con la URL real de tu backend en Render, pero siempre agregar el "/api".
 5. Haz clic en **Create Static Site**
 
 ## 📦 Notas Importantes sobre Dependencias
