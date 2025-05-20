@@ -34,7 +34,7 @@
 }
 
 .medicamentos-tabla th {
-  background-color: #4285f4;
+  background-color: #16c94b;
   color: white;
   font-weight: 500;
 }
@@ -45,7 +45,7 @@
 
 /* Botones y acciones */
 .btn-nuevo {
-  background-color: #4285f4;
+  background-color: #16c94b;
   color: white;
   padding: 8px 16px;
   border-radius: 4px;
@@ -56,7 +56,7 @@
 }
 
 .btn-nuevo:hover {
-  background-color: #3367d6;
+  background-color:#59ec60;
 }
 
 .acciones {

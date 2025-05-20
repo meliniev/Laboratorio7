@@ -11,9 +11,9 @@
 }
 
 .login-card h2 {
-  color: #2c3e50;
+  color: #08661c;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #3498db;
+  border-bottom: 2px solid#08661c;
   padding-bottom: 0.5rem;
 }
 
@@ -22,32 +22,32 @@
 }
 
 .btn-primary {
-  background-color: #3498db;
-  border-color: #3498db;
+  background-color:#08661c;
+  border-color: #08661c;
   padding: 10px;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-  background-color: #2980b9;
-  border-color: #2980b9;
+  background-color: #16c94b;
+  border-color: #16c94b;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary:disabled {
-  background-color: #7fb5d9;
-  border-color: #7fb5d9;
+  background-color: #59ec60;
+  border-color: #59ec60;
 }
 
 a {
-  color: #3498db;
+  color: #0a7c51;
   text-decoration: none;
 }
 
 a:hover {
-  color: #2980b9;
+  color:#16c94b;
   text-decoration: underline;
 }
 

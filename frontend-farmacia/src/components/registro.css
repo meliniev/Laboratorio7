@@ -12,7 +12,7 @@
 .registro-card h2 {
   color: #2c3e50;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #3498db;
+  border-bottom: 2px solid#16c94b;
   padding-bottom: 0.5rem;
 }
 
@@ -21,16 +21,16 @@
 }
 
 .btn-primary {
-  background-color: #3498db;
-  border-color: #3498db;
+  background-color: #16c94b;
+  border-color: #16c94b;
   padding: 10px;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .btn-primary:hover, .btn-primary:focus {
-  background-color: #2980b9;
-  border-color: #2980b9;
+  background-color: #08661c;
+  border-color: #08661c;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

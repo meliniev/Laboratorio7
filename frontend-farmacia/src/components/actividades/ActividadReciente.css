@@ -1,7 +1,7 @@
 .actividad-reciente h2 {
   color: #2c3e50;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #3498db;
+  border-bottom: 2px solid #08661c;
   padding-bottom: 0.5rem;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .actividad-reciente th {
-  background-color: #3498db;
+  background-color: #08661c;
   color: white;
 }
 
